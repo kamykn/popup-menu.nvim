@@ -9,7 +9,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! floating_menu#open()
-	execute '!' + g:floating_menu_plugin_path + "/src/src"
+	execute '!' . g:floating_menu_plugin_path . "/src/src"
 	return 1
 endfunction
 
