@@ -2,15 +2,22 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/manifoldco/promptui"
+	"os"
 )
 
 func main() {
+	templates := &promptui.SelectTemplates{
+		Label:    "\n",
+		Active:   "{{ . | cyan }}",
+		Inactive: "{{ . }}",
+	}
+
 	prompt := promptui.Select{
-		Label: "Select Day",
-		Items: []string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-			"Saturday", "Sunday"},
+		Items:        os.Args[2:],
+		Templates:    templates,
+		HideHelp:     true,
+		HideSelected: true,
 	}
 
 	_, result, err := prompt.Run()
@@ -20,5 +27,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("You choose %q\n", result)
+	fmt.Printf("%s\n", result)
 }
