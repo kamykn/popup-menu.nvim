@@ -8,13 +8,16 @@ import (
 
 func main() {
 	templates := &promptui.SelectTemplates{
-		Label:    "\n",
+		Label:    "\r",
 		Active:   "{{ . | cyan }}",
 		Inactive: "{{ . }}",
+		Selected: "\r",
+		Details:  "\r",
+		Help:     "\r",
 	}
 
 	prompt := promptui.Select{
-		Items:        os.Args[2:],
+		Items:        os.Args[1:],
 		Templates:    templates,
 		HideHelp:     true,
 		HideSelected: true,
@@ -27,5 +30,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("%s\n", result)
+	fmt.Printf("%s", result)
 }
