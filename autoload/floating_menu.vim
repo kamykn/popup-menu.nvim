@@ -12,12 +12,11 @@ function! s:exec_menu(command, callback) abort
 	if has('nvim')
 		let l:buf = nvim_create_buf(v:false, v:true)
 		let l:opts = {
-			\ 'relative': 'editor',
-			\ 'width': 10,
-			\ 'height': 4,
-			\ 'col': 8,
-			\ 'row': 7,
-			\ 'anchor': 'NW',
+			\ 'relative': 'cursor',
+			\ 'width': 15,
+			\ 'height': 5,
+			\ 'col': 0,
+			\ 'row': 1,
 			\ 'style': 'minimal'
 			\ }
 		let l:floating_win_id = nvim_open_win(l:buf, v:false, l:opts)
@@ -25,6 +24,8 @@ function! s:exec_menu(command, callback) abort
 
 		" window focus
 		execute l:win . 'windo :'
+		setlocal laststatus=0
+		setlocal scrolloff=0
 
 		call termopen(a:command, {
 			\ 'on_exit': {id, code, event -> s:on_exit(code, l:floating_win_id, a:callback)}
