@@ -5,6 +5,7 @@ import (
 	"github.com/marcusolsson/tui-go"
 	"log"
 	"os"
+	"strconv"
 )
 
 // StyledBox is a Box with an overriden Draw method.
@@ -22,20 +23,13 @@ func (s *StyledBox) Draw(p *tui.Painter) {
 }
 
 func main() {
-	t := tui.NewTheme()
-	normal := tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorDefault}
-	t.SetStyle("normal", normal)
-
-	list := os.Args[1:]
+	list := os.Args[5:]
 
 	// A list with some items selected.
 	l := tui.NewList()
 	l.SetFocused(true)
 	l.AddItems(list...)
 	l.SetSelected(0)
-
-	t.SetStyle("list.item", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorDefault})
-	t.SetStyle("list.item.selected", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorMagenta, Bold: tui.DecorationOn})
 
 	root := tui.NewVBox(l)
 
@@ -44,10 +38,24 @@ func main() {
 		log.Fatal(err)
 	}
 
+	t := tui.NewTheme()
+
+	// tcell
+	// FYI: https://godoc.org/github.com/gdamore/tcell#Color
+	ctermbg, err1 := strconv.ParseInt(os.Args[1], 10, 32)
+	ctermfg, err2 := strconv.ParseInt(os.Args[2], 10, 32)
+	if err1 == nil && err2 == nil {
+		t.SetStyle("list.item", tui.Style{Bg: tui.Color(ctermbg), Fg: tui.Color(ctermfg)})
+	}
+
+	ctermbg, err1 = strconv.ParseInt(os.Args[3], 10, 32)
+	ctermfg, err2 = strconv.ParseInt(os.Args[4], 10, 32)
+	if err1 == nil && err2 == nil {
+		t.SetStyle("list.item.selected", tui.Style{Bg: tui.Color(ctermbg), Fg: tui.Color(ctermfg), Bold: tui.DecorationOn})
+	}
+
+	t.SetStyle("normal", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorDefault})
 	ui.SetTheme(t)
-	ui.SetKeybinding("Esc", func() { ui.Quit() })
-	ui.SetKeybinding("Enter", func() {
-	})
 
 	l.OnItemActivated(func(l *tui.List) {
 		ui.Quit()

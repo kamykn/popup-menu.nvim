@@ -49,7 +49,15 @@ function! floating_menu#open(callback, choices) abort
 		setlocal laststatus=0
 		setlocal scrolloff=0
 
-		call termopen(g:floating_menu_plugin_path . "/src/src " . join(a:choices, ' '), {
+		let l:color_settings = [
+					\ synIDattr(hlID('Pmenu'), 'bg', 'cterm'),
+					\ synIDattr(hlID('Pmenu'), 'fg', 'cterm'),
+					\ synIDattr(hlID('PmenuSel'), 'bg', 'cterm'),
+					\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
+					\ ]
+
+		let cmd = g:floating_menu_plugin_path . '/src/src ' . join(l:color_settings, ' ') . ' ' . join(a:choices, ' ')
+		call termopen(cmd, {
 			\ 'on_exit': {id, code, event -> s:on_exit(code, l:floating_win_id, a:callback)}
 			\ })
 		startinsert
