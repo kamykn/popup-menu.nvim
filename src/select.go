@@ -23,7 +23,7 @@ func (s *StyledBox) Draw(p *tui.Painter) {
 
 func main() {
 	t := tui.NewTheme()
-	normal := tui.Style{Bg: tui.ColorWhite, Fg: tui.ColorBlack}
+	normal := tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorDefault}
 	t.SetStyle("normal", normal)
 
 	list := os.Args[1:]
@@ -34,8 +34,8 @@ func main() {
 	l.AddItems(list...)
 	l.SetSelected(0)
 
-	t.SetStyle("list.item", tui.Style{Bg: tui.ColorBlack, Fg: tui.ColorWhite})
-	t.SetStyle("list.item.selected", tui.Style{Bg: tui.ColorBlack, Fg: tui.ColorCyan})
+	t.SetStyle("list.item", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorDefault})
+	t.SetStyle("list.item.selected", tui.Style{Bg: tui.ColorDefault, Fg: tui.ColorMagenta, Bold: tui.DecorationOn})
 
 	root := tui.NewVBox(l)
 
