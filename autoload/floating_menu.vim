@@ -8,6 +8,9 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
+" 実行パス
+let s:floating_menu_plugin_path = expand('<sfile>:p:h:h')
+
 function! s:winid2tabnr(win_id) abort
   return win_id2tabwin(a:win_id)[1]
 endfunction
@@ -56,12 +59,22 @@ function! floating_menu#open(callback, choices) abort
 					\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
 					\ ]
 
-		let cmd = g:floating_menu_plugin_path . '/src/src ' . join(l:color_settings, ' ') . ' ' . join(a:choices, ' ')
+		let cmd = '"' . s:floating_menu_plugin_path . '/src/src" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(a:choices)
 		call termopen(cmd, {
 			\ 'on_exit': {id, code, event -> s:on_exit(code, l:floating_win_id, a:callback)}
 			\ })
 		startinsert
 	endif
+endfunction
+
+function! s:get_shell_args_str(choices) abort
+	let l:choices = ''
+
+	for l:choice in a:choices
+		let l:choices = l:choices . ' ' . shellescape(l:choice)
+	endfor
+
+	return l:choices
 endfunction
 
 function! s:test_callback(selected) abort
