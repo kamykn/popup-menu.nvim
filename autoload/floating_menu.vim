@@ -1,8 +1,3 @@
-" Plugin that improved vim spelling.
-" Version 1.0.0
-" Author kamykn
-" License VIM LICENSE
-
 scriptencoding utf-8
 
 let s:save_cpo = &cpo
@@ -75,15 +70,6 @@ function! s:get_shell_args_str(choices) abort
 	endfor
 
 	return l:choices
-endfunction
-
-function! s:test_callback(selected) abort
-	enew
-	execute ":normal i" . a:selected
-endfunction
-
-function! floating_menu#test() abort
-	call floating_menu#open({selected -> s:test_callback(selected)}, ['aaa', 'bbbbbb', 'c', 'dddd', 'eeeeeeeeeeeee'])
 endfunction
 
 let &cpo = s:save_cpo
