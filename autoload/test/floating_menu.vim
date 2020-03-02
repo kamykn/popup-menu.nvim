@@ -9,7 +9,21 @@ function! s:test_callback(selected) abort
 endfunction
 
 function! test#floating_menu#test() abort
-	call floating_menu#open({selected -> s:test_callback(selected)}, ['aaa', 'bbbbbb', 'c', 'dddd', 'eeeeeeeeeeeee'])
+	let l:list = ['aaa', 'bbbbbb', 'c', 'dddd', 'eeeeeeeeeeeee']
+	call floating_menu#open(l:list, {selected -> s:test_callback(selected)}, {})
+endfunction
+
+function! test#floating_menu#test_args() abort
+	let l:list = ['aaa', 'bbbbbb', 'c', 'dddd', 'eeeeeeeeeeeee']
+	call floating_menu#open(l:list,
+				\ {selected -> s:test_callback(selected)},
+				\ {
+				\ 	'relative': 'editor',
+				\ 	'width': 30,
+				\ 	'height': 7,
+				\ 	'col': 5,
+				\ 	'row': 5
+				\ })
 endfunction
 
 let &cpo = s:save_cpo
