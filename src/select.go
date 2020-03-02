@@ -61,6 +61,8 @@ func main() {
 		ui.Quit()
 		fmt.Println(list[l.Selected()])
 	})
+	ui.SetKeybinding("Esc", func() { ui.Quit() })
+	ui.SetKeybinding("Ctrl+C", func() { ui.Quit() })
 
 	if err := ui.Run(); err != nil {
 		log.Fatal(err)
