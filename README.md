@@ -1,5 +1,7 @@
 # popup-menu.nvim
 
+<img src="https://github.com/kamykn/popup-menu.nvim/blob/master/img/top.png?raw=true" width=680>
+
 ## 1 Installation
 **vim-plug**
 
