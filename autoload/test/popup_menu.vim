@@ -8,14 +8,14 @@ function! s:test_callback(selected) abort
 	execute ":normal i" . a:selected
 endfunction
 
-function! test#floating_menu#test() abort
+function! test#popup_menu#test() abort
 	let l:list = ['aaa', 'bbbbbb', 'c', 'dddd', 'eeeeeeeeeeeee']
-	call floating_menu#open(l:list, {selected -> s:test_callback(selected)}, {})
+	call popup_menu#open(l:list, {selected -> s:test_callback(selected)}, {})
 endfunction
 
-function! test#floating_menu#test_args() abort
+function! test#popup_menu#test_args() abort
 	let l:list = ['aaa', 'bbbbbb', 'c', 'dddd', 'eeeeeeeeeeeee']
-	call floating_menu#open(l:list,
+	call popup_menu#open(l:list,
 				\ {selected -> s:test_callback(selected)},
 				\ {
 				\ 	'relative': 'editor',

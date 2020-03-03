@@ -4,16 +4,16 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " 実行パス
-let s:floating_menu_plugin_path = expand('<sfile>:p:h:h')
+let s:popup_menu_plugin_path = expand('<sfile>:p:h:h')
 
 function! s:winid2tabnr(win_id) abort
   return win_id2tabwin(a:win_id)[1]
 endfunction
 
-function! s:on_exit(code, floating_win_id, Callback) abort
+function! s:on_exit(code, popup_win_id, Callback) abort
 	if a:code == 0
 		let l:stdout = getline(1)
-		call nvim_win_close(a:floating_win_id, v:true)
+		call nvim_win_close(a:popup_win_id, v:true)
 		call a:Callback(l:stdout)
 	endif
 endfunction
@@ -46,7 +46,7 @@ endfunction
 " a:1 = choices: list of strings
 " a:2 = Callback: popup menu callback
 " a:3 = win_opt: nvim_open_win() window options
-function! floating_menu#open(...) abort
+function! popup_menu#open(...) abort
 	" check args count
 	if has('nvim') && a:0 >= 2
 		let l:choices = a:1
@@ -54,8 +54,8 @@ function! floating_menu#open(...) abort
 		let l:win_opt = a:0 >= 3 ? a:3 : {}
 
 		let l:buf = nvim_create_buf(v:false, v:true)
-		let l:floating_win_id = nvim_open_win(l:buf, v:false, s:init_win_opt(l:choices, l:win_opt))
-		let l:win = s:winid2tabnr(l:floating_win_id)
+		let l:popup_win_id = nvim_open_win(l:buf, v:false, s:init_win_opt(l:choices, l:win_opt))
+		let l:win = s:winid2tabnr(l:popup_win_id)
 
 		" window focus
 		execute l:win . 'windo :'
@@ -69,9 +69,9 @@ function! floating_menu#open(...) abort
 					\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
 					\ ]
 
-		let cmd = '"' . s:floating_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+		let cmd = '"' . s:popup_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 		call termopen(cmd, {
-			\ 'on_exit': {id, code, event -> s:on_exit(code, l:floating_win_id, l:Callback)}
+			\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
 			\ })
 		startinsert
 	endif
