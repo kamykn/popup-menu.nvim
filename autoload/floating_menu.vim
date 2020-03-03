@@ -69,7 +69,7 @@ function! floating_menu#open(...) abort
 					\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
 					\ ]
 
-		let cmd = '"' . s:floating_menu_plugin_path . '/src/src" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+		let cmd = '"' . s:floating_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 		call termopen(cmd, {
 			\ 'on_exit': {id, code, event -> s:on_exit(code, l:floating_win_id, l:Callback)}
 			\ })
@@ -85,6 +85,22 @@ function! s:get_shell_args_str(choices) abort
 	endfor
 
 	return l:choices
+endfunction
+
+function! s:get_bin_path() abort
+	let l:path = v:null
+
+	if has('mac')
+		let l:path = 'bin/darwin-amd64'
+	elseif has ('linux')
+		let l:path = 'bin/linux-amd64'
+	endif
+
+	if l:path == v:null
+		echoerr "Binary not found."
+	endif
+
+	return l:path
 endfunction
 
 let &cpo = s:save_cpo
