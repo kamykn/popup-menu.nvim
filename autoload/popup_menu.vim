@@ -48,33 +48,35 @@ endfunction
 " a:3 = win_opt: nvim_open_win() window options
 function! popup_menu#open(...) abort
 	" check args count
-	if has('nvim') && a:0 >= 2
-		let l:choices = a:1
-		let l:Callback = a:2
-		let l:win_opt = a:0 >= 3 ? a:3 : {}
-
-		let l:buf = nvim_create_buf(v:false, v:true)
-		let l:popup_win_id = nvim_open_win(l:buf, v:false, s:init_win_opt(l:choices, l:win_opt))
-		let l:win = s:winid2tabnr(l:popup_win_id)
-
-		" window focus
-		execute l:win . 'windo :'
-		setlocal laststatus=0
-		setlocal scrolloff=0
-
-		let l:color_settings = [
-					\ synIDattr(hlID('Pmenu'), 'bg', 'cterm'),
-					\ synIDattr(hlID('Pmenu'), 'fg', 'cterm'),
-					\ synIDattr(hlID('PmenuSel'), 'bg', 'cterm'),
-					\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
-					\ ]
-
-		let cmd = '"' . s:popup_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
-		call termopen(cmd, {
-			\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
-			\ })
-		startinsert
+	if !has('nvim') || a:0 < 2
+		return
 	endif
+
+	let l:choices = a:1
+	let l:Callback = a:2
+	let l:win_opt = a:0 >= 3 ? a:3 : {}
+
+	let l:buf = nvim_create_buf(v:false, v:true)
+	let l:popup_win_id = nvim_open_win(l:buf, v:false, s:init_win_opt(l:choices, l:win_opt))
+	let l:win = s:winid2tabnr(l:popup_win_id)
+
+	" window focus
+	execute l:win . 'windo :'
+	setlocal laststatus=0
+	setlocal scrolloff=0
+
+	let l:color_settings = [
+				\ synIDattr(hlID('Pmenu'), 'bg', 'cterm'),
+				\ synIDattr(hlID('Pmenu'), 'fg', 'cterm'),
+				\ synIDattr(hlID('PmenuSel'), 'bg', 'cterm'),
+				\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
+				\ ]
+
+	let cmd = '"' . s:popup_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+	call termopen(cmd, {
+		\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
+		\ })
+	startinsert
 endfunction
 
 function! s:get_shell_args_str(choices) abort
