@@ -72,6 +72,8 @@ function! popup_menu#open(...) abort
 				\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
 				\ ]
 
+	" only for this buffer
+	setlocal shellslash
 	let cmd = '"' . s:popup_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 	call termopen(cmd, {
 		\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
@@ -94,8 +96,12 @@ function! s:get_bin_path() abort
 
 	if has('mac')
 		let l:path = 'bin/darwin-amd64'
-	elseif has ('linux')
+	elseif has('linux')
 		let l:path = 'bin/linux-amd64'
+	elseif has('win32')
+		let l:path = 'bin/win-386'
+	elseif has('win64')
+		let l:path = 'bin/win-amd64'
 	endif
 
 	if l:path == v:null
