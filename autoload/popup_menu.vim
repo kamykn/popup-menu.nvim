@@ -3,7 +3,6 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-" 実行パス
 let s:popup_menu_plugin_path = expand('<sfile>:p:h:h')
 
 function! s:winid2tabnr(win_id) abort
@@ -72,12 +71,16 @@ function! popup_menu#open(...) abort
 				\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
 				\ ]
 
-	" only for this buffer
+	" windows support (only this buffer)
 	setlocal shellslash
+
+	enew!
 	let cmd = '"' . s:popup_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 	call termopen(cmd, {
 		\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
 		\ })
+	" set buffer name
+	file select
 	startinsert
 endfunction
 
