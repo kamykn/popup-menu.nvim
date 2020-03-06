@@ -73,6 +73,7 @@ The style is same as `PMenu` and `PMenuSel`.
 However, only `ctermbg` and `ctermfg` are used.
 
 ```vim
+" sample settings
 hi Pmenu ctermfg=254 ctermbg=237 cterm=NONE guifg=#e1e1e1 guibg=#383838 gui=NONE
 hi PmenuSel ctermfg=135 ctermbg=239 cterm=NONE guifg=#b26eff guibg=#4e4e4e gui=NONE
 ```
