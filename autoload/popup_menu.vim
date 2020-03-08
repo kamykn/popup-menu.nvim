@@ -86,7 +86,7 @@ function! popup_menu#open(...) abort
 				\ })
 
 	" set buffer name
-	file select
+	file pmenu
 	startinsert
 endfunction
 
