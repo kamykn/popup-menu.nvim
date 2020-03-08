@@ -51,6 +51,11 @@ function! popup_menu#open(...) abort
 		return
 	endif
 
+	let l:bin_path = s:get_bin_path()
+	if l:bin_path == v:null
+		echoerr "Binary path not found."
+	endif
+
 	let l:choices = a:1
 	let l:Callback = a:2
 	let l:win_opt = a:0 >= 3 ? a:3 : {}
@@ -75,10 +80,11 @@ function! popup_menu#open(...) abort
 	setlocal shellslash
 
 	enew!
-	let cmd = '"' . s:popup_menu_plugin_path . '/' . s:get_bin_path() . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+	let cmd = '"' . s:popup_menu_plugin_path . '/' . l:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 	call termopen(cmd, {
-		\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
-		\ })
+				\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
+				\ })
+
 	" set buffer name
 	file select
 	startinsert
@@ -105,10 +111,6 @@ function! s:get_bin_path() abort
 		let l:path = 'bin/win-386'
 	elseif has('win64')
 		let l:path = 'bin/win-amd64'
-	endif
-
-	if l:path == v:null
-		echoerr "Binary not found."
 	endif
 
 	return l:path
