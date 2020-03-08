@@ -53,6 +53,7 @@ function! popup_menu#open(...) abort
 
 	if s:bin_path == v:null
 		echoerr "Binary path not found."
+		return
 	endif
 
 	let l:choices = a:1
