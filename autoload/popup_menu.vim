@@ -10,10 +10,14 @@ function! s:winid2tabnr(win_id) abort
 endfunction
 
 function! s:on_exit(code, popup_win_id, Callback) abort
+	let l:stdout = getline(1)
+	call nvim_win_close(a:popup_win_id, v:true)
+
 	if a:code == 0
-		let l:stdout = getline(1)
-		call nvim_win_close(a:popup_win_id, v:true)
 		call a:Callback(l:stdout)
+	else
+		echoerr l:stdout
+		return
 	endif
 endfunction
 
@@ -76,18 +80,23 @@ function! popup_menu#open(...) abort
 				\ synIDattr(hlID('PmenuSel'), 'fg', 'cterm'),
 				\ ]
 
-	" windows support (only this buffer)
-	setlocal shellslash
+	try
+		" windows support (only this buffer)
+		setlocal shellslash
 
-	enew!
-	let cmd = '"' . s:popup_menu_plugin_path . '/' . s:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
-	call termopen(cmd, {
-				\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
-				\ })
+		enew!
+		let cmd = '"' . s:popup_menu_plugin_path . '/' . s:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+		call termopen(cmd, {
+					\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)},
+					\ })
 
-	" set buffer name
-	file pmenu
-	startinsert
+		" set buffer name
+		file pmenu-nvim
+		startinsert
+	catch
+		call nvim_win_close(l:popup_win_id, v:true)
+		echomsg 'error occurred:' . v:exception
+	endtry
 endfunction
 
 function! s:get_shell_args_str(choices) abort
