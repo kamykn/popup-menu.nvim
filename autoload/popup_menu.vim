@@ -51,8 +51,7 @@ function! popup_menu#open(...) abort
 		return
 	endif
 
-	let l:bin_path = s:get_bin_path()
-	if l:bin_path == v:null
+	if s:bin_path == v:null
 		echoerr "Binary path not found."
 	endif
 
@@ -80,7 +79,7 @@ function! popup_menu#open(...) abort
 	setlocal shellslash
 
 	enew!
-	let cmd = '"' . s:popup_menu_plugin_path . '/' . l:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+	let cmd = '"' . s:popup_menu_plugin_path . '/' . s:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 	call termopen(cmd, {
 				\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)}
 				\ })
@@ -103,18 +102,37 @@ endfunction
 function! s:get_bin_path() abort
 	let l:path = v:null
 
-	if has('mac')
-		let l:path = 'bin/darwin-amd64'
-	elseif has('linux')
-		let l:path = 'bin/linux-amd64'
-	elseif has('win32')
+	" windowsで極力外部コマンドを実行したくないのでここで判定できればここで
+	if has('win32')
 		let l:path = 'bin/win-386'
 	elseif has('win64')
 		let l:path = 'bin/win-amd64'
+	else
+		let l:archi_info = trim(system('"' . s:popup_menu_plugin_path . '/script/archi_info.sh"'))
+		if l:archi_info != '' && (
+				\ l:archi_info == 'darwin-amd64'  ||
+				\ l:archi_info == 'darwin-386'    ||
+				\ l:archi_info == 'linux-arm5'    ||
+				\ l:archi_info == 'linux-arm6'    ||
+				\ l:archi_info == 'linux-arm7'    ||
+				\ l:archi_info == 'linux-amd64'   ||
+				\ l:archi_info == 'linux-386'     ||
+				\ l:archi_info == 'freebsd-amd64' ||
+				\ l:archi_info == 'freebsd-386'   ||
+				\ l:archi_info == 'openbsd-amd64' ||
+				\ l:archi_info == 'openbsd-386'   ||
+				\ l:archi_info == 'windows-386'   ||
+				\ l:archi_info == 'windows-amd64'
+				\ )
+			let l:path = 'bin/' . l:archi_info
+		endif
 	endif
 
 	return l:path
 endfunction
+
+" select buffer
+let s:bin_path = s:get_bin_path()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
