@@ -2,7 +2,11 @@
 
 set -u
 
-# Try to download binary executable
+# Echo binary path executable to stdout.
+# FYI:
+# https://github.com/kamykn/popup-menu.nvim/pull/1/files
+# https://github.com/junegunn/fzf/blob/7c40a424c0bf5a8967816d51ead6a71a334f30bb/install#L176-L202
+# https://github.com/golang/go/wiki/GoArm
 archi=$(uname -sm)
 binary_available=1
 binary_error=""
