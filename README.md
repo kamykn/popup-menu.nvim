@@ -43,7 +43,7 @@ call popup_menu#open(
 		\ })
 ```
 
-### 2.3 Sample using Vim8 popup_menu()
+### 2.3 Sample of popup-menu.nvim with using popup_menu() of Vim8
 
 ```vim
 " list for popup menu.
