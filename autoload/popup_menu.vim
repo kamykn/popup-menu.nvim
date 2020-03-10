@@ -11,7 +11,11 @@ endfunction
 
 function! s:on_exit(code, popup_win_id, Callback) abort
 	let l:stdout = getline(1)
-	call nvim_win_close(a:popup_win_id, v:true)
+
+	" delete buffer #2
+	let l:buf_id = bufnr('%')
+	call nvim_win_close(a:popup_win_id, v:false)
+	execute 'bdelete! ' . l:buf_id
 
 	if a:code == 0
 		call a:Callback(l:stdout)
@@ -64,8 +68,8 @@ function! popup_menu#open(...) abort
 	let l:Callback = a:2
 	let l:win_opt = a:0 >= 3 ? a:3 : {}
 
-	let l:buf = nvim_create_buf(v:false, v:true)
-	let l:popup_win_id = nvim_open_win(l:buf, v:false, s:init_win_opt(l:choices, l:win_opt))
+	let l:buf_id = nvim_create_buf(v:false, v:true)
+	let l:popup_win_id = nvim_open_win(l:buf_id, v:false, s:init_win_opt(l:choices, l:win_opt))
 	let l:win = s:winid2tabnr(l:popup_win_id)
 
 	" window focus
@@ -84,7 +88,6 @@ function! popup_menu#open(...) abort
 		" windows support (only this buffer)
 		setlocal shellslash
 
-		enew!
 		let cmd = '"' . s:popup_menu_plugin_path . '/' . s:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 		call termopen(cmd, {
 					\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)},
