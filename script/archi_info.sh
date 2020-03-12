@@ -22,12 +22,12 @@ case "$archi" in
   FreeBSD\ *86)    echo freebsd-386   ;;
   OpenBSD\ *64)    echo openbsd-amd64 ;;
   OpenBSD\ *86)    echo openbsd-386   ;;
-  CYGWIN*\ *64)    echo windows-amd64 ;;
-  MINGW*\ *86)     echo windows-386   ;;
-  MINGW*\ *64)     echo windows-amd64 ;;
-  MSYS*\ *86)      echo windows-386   ;;
-  MSYS*\ *64)      echo windows-amd64 ;;
-  Windows*\ *86)   echo windows-386   ;;
-  Windows*\ *64)   echo windows-amd64 ;;
+  CYGWIN*\ *64)    echo win-amd64 ;;
+  MINGW*\ *86)     echo win-386   ;;
+  MINGW*\ *64)     echo win-amd64 ;;
+  MSYS*\ *86)      echo win-386   ;;
+  MSYS*\ *64)      echo win-amd64 ;;
+  Windows*\ *86)   echo win-386   ;;
+  Windows*\ *64)   echo win-amd64 ;;
   *)               ;;
 esac

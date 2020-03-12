@@ -88,7 +88,12 @@ function! popup_menu#open(...) abort
 		" windows support (only this buffer)
 		setlocal shellslash
 
-		let cmd = '"' . s:popup_menu_plugin_path . '/' . s:bin_path . '/tui-select" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
+		let l:ext = ''
+		if s:bin_path == 'bin/win-amd64' || s:bin_path == 'bin/win-386'
+			let l:ext = '.exe'
+		endif
+
+		let cmd = '"' . s:popup_menu_plugin_path . '/' . s:bin_path . '/tui-select' . l:ext . '" ' . s:get_shell_args_str(l:color_settings) . ' ' . s:get_shell_args_str(l:choices)
 		call termopen(cmd, {
 					\ 'on_exit': {id, code, event -> s:on_exit(code, l:popup_win_id, l:Callback)},
 					\ })
@@ -134,8 +139,8 @@ function! s:get_bin_path() abort
 				\ l:archi_info == 'freebsd-386'   ||
 				\ l:archi_info == 'openbsd-amd64' ||
 				\ l:archi_info == 'openbsd-386'   ||
-				\ l:archi_info == 'windows-386'   ||
-				\ l:archi_info == 'windows-amd64'
+				\ l:archi_info == 'win-386'   ||
+				\ l:archi_info == 'win-amd64'
 				\ )
 			let l:path = 'bin/' . l:archi_info
 		endif
