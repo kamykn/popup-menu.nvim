@@ -80,8 +80,10 @@ function! popup_menu#open(...) abort
 	execute l:win . 'windo :'
 	let s:laststatus = &laststatus
 	let s:scrolloff = &scrolloff
+	let s:sidescrolloff = &sidescrolloff
 	set laststatus=0
 	set scrolloff=0
+	set sidescrolloff=0
 
 	let l:color_settings = [
 				\ synIDattr(hlID('Pmenu'), 'bg', 'cterm'),
