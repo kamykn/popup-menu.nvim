@@ -6,7 +6,7 @@ set cpo&vim
 let s:popup_menu_plugin_path = expand('<sfile>:p:h:h')
 
 function! s:winid2tabnr(win_id) abort
-  return win_id2tabwin(a:win_id)[1]
+	return win_id2tabwin(a:win_id)[1]
 endfunction
 
 function! s:on_exit(code, popup_win_id, Callback) abort
