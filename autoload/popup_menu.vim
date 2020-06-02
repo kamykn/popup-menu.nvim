@@ -10,6 +10,10 @@ function! s:winid2tabnr(win_id) abort
 endfunction
 
 function! s:on_exit(code, popup_win_id, Callback) abort
+	let &laststatus = s:laststatus
+	let &scrolloff = s:scrolloff
+	let &shellslash = s:shellslash
+
 	let l:stdout = getline(1)
 
 	" delete buffer #2
@@ -74,8 +78,10 @@ function! popup_menu#open(...) abort
 
 	" window focus
 	execute l:win . 'windo :'
-	setlocal laststatus=0
-	setlocal scrolloff=0
+	let s:laststatus = &laststatus
+	let s:scrolloff = &scrolloff
+	set laststatus=0
+	set scrolloff=0
 
 	let l:color_settings = [
 				\ synIDattr(hlID('Pmenu'), 'bg', 'cterm'),
@@ -86,7 +92,8 @@ function! popup_menu#open(...) abort
 
 	try
 		" windows support (only this buffer)
-		setlocal shellslash
+		let s:shellslash = &shellslash
+		set shellslash
 
 		let l:ext = ''
 		if s:bin_path == 'bin/win-amd64' || s:bin_path == 'bin/win-386'
