@@ -61,10 +61,51 @@ func main() {
 		ui.Quit()
 		fmt.Println(list[l.Selected()])
 	})
+	ui.ClearKeybindings()
 	ui.SetKeybinding("Esc", func() { ui.Quit() })
 	ui.SetKeybinding("Ctrl+C", func() { ui.Quit() })
+	ui.SetKeybinding("J", func() { moveNextJ(l) })
+	ui.SetKeybinding("Tab", func() { moveNext(l) })
+	ui.SetKeybinding("Ctrl+N", func() { moveNext(l) })
+	ui.SetKeybinding("K", func() { movePrevK(l) })
+	ui.SetKeybinding("Ctrl+P", func() { movePrev(l) })
+	ui.SetKeybinding("BackTab", func() { movePrev(l) })
 
 	if err := ui.Run(); err != nil {
 		log.Fatal(err)
+	}
+}
+
+// move to negative position
+func moveNextJ(l *tui.List) {
+	next := l.Selected() + 1
+	if l.Length() <= next {
+		l.SetSelected(-1)
+	}
+}
+
+// move to negative position
+func movePrevK(l *tui.List) {
+	prev := l.Selected() - 1
+	if 0 > prev {
+		l.SetSelected(l.Length())
+	}
+}
+
+func moveNext(l *tui.List) {
+	next := l.Selected() + 1
+	if l.Length() > next {
+		l.SetSelected(next)
+	} else {
+		l.SetSelected(0)
+	}
+}
+
+func movePrev(l *tui.List) {
+	prev := l.Selected() - 1
+	if 0 <= prev {
+		l.SetSelected(prev)
+	} else {
+		l.SetSelected(l.Length() - 1)
 	}
 }
